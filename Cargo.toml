@@ -1,0 +1,8 @@
+[package]
+name = "billard"
+version = "0.1.0"
+authors = ["Jonas Hagen <jonas.hagen@iap.unibe.ch>"]
+
+[dependencies]
+nalgebra = ""
+rand = ""
