@@ -3,6 +3,7 @@ extern crate rand;
 
 mod ball;
 mod world;
+mod stats;
 
 pub mod common {
     use na::Vector3;
@@ -13,3 +14,4 @@ pub mod common {
 
 pub use ball::Ball;
 pub use world::World;
+pub use stats::*;
