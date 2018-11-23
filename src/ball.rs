@@ -4,11 +4,14 @@ use rand::Rng;
 
 #[derive(Debug)]
 pub struct Ball {
-    x: Vec3,
-    v: Vec3,
+    pub x: Vec3,
+    pub v: Vec3,
 }
 
 impl Ball {
+
+    pub const RADIUS: f32 = 1.0;
+
     pub fn new(x: Vec3, v: Vec3) -> Ball {
         return Ball { x, v };
     }
