@@ -1,5 +1,5 @@
 use common::{Dim, List, Vec3};
-use na::norm;
+use na;
 use rand::Rng;
 
 #[derive(Debug)]
@@ -23,12 +23,33 @@ impl Ball {
         Ball::new(x, v)
     }
 
+    /// Reflect a ball at a plane defined by normal vector.
+    pub fn reflect(&mut self, n: &na::Unit<Vec3>) {
+        let v = self.v;
+        let n = n.unwrap();
+        self.v = v - 2.0 * (v.dot(&n)) * n;
+    }
+
     pub fn step(&mut self, dt: f32) {
         self.x += dt * self.v;
     }
 
     pub fn dist(&self, other: &Ball) -> Dim {
         let diff = self.x - other.x;
-        norm(&diff)
+        na::norm(&diff)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use common::{Vec3};
+    use super::*;
+
+    #[test]
+    fn test_reflection() {
+        let mut ball = Ball::new(Vec3::zeros(), Vec3::x());
+        ball.reflect(&Vec3::x_axis());
+        assert_eq!(ball.v, -Vec3::x());
+        assert_eq!(ball.x, Vec3::zeros());
     }
 }
