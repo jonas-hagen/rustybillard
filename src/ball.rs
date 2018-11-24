@@ -80,6 +80,10 @@ impl Ball {
         let diff = self.x - other.x;
         na::norm(&diff)
     }
+
+    pub fn speed(&self) -> f32 {
+        return self.v.magnitude();
+    }
 }
 
 #[cfg(test)]

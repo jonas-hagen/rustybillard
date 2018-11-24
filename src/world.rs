@@ -1,16 +1,19 @@
 use common::{Dim, List, Vec3};
 use Ball;
+use Histogram;
 
 #[derive(Debug)]
 pub struct World {
     size: Dim,
     balls: List<Ball>,
+    hist_speed: Option<Histogram>,
     time: f64,
 }
 
 impl World {
     pub fn new_random(size: Dim, n_balls: i64) -> World {
         let mut balls = List::new();
+        let hist_speed = Histogram::new(0.0, size, 101);
 
         for _ in 0..n_balls {
             balls.push(Ball::new_random(size));
@@ -19,6 +22,7 @@ impl World {
         World {
             size,
             balls,
+            hist_speed: Some(hist_speed),
             time: 0.0,
         }
     }
@@ -61,11 +65,32 @@ impl World {
         }
     }
 
+    pub fn update_hist_speed(&mut self) {
+        if let Some(ref mut hist) = self.hist_speed {
+            hist.reset();
+            for b in self.balls.iter() {
+                hist.insert(b.speed())
+            }
+        }
+    }
+
     pub fn step(&mut self, dt: f32) {
         self.step_balls(dt);
         self.reflect_at_walls();
         self.resolve_collisions();
+        self.update_hist_speed();
         self.time += dt as f64;
+    }
+
+    pub fn hist_speed<'a>(&'a self) -> Option<&'a Histogram> {
+        match self.hist_speed {
+            Some(ref hist) => return Some(&hist),
+            None => return None,
+        };
+    }
+
+    pub fn time(&self) -> f64 {
+        return self.time;
     }
 }
 
@@ -80,6 +105,7 @@ mod test {
         World {
             size: 3.0,
             balls: balls,
+            hist_speed: None,
             time: 0.0,
         }
     }
@@ -119,6 +145,7 @@ mod test {
         let mut world = World {
             size: 10.0,
             balls: balls,
+            hist_speed: None,
             time: 0.0,
         };
 
