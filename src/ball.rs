@@ -21,7 +21,8 @@ impl Ball {
         let r: List<Dim> = (0..6).map(|_| rng.gen_range(0.0, world_size)).collect();
 
         let x = Vec3::new(r[0], r[1], r[2]);
-        let v = 0.1 * Vec3::new(r[3], r[4], r[5]);
+        let v = Vec3::new(r[3], r[4], r[5]);
+        let v = 0.2 * (world_size as f32) * v.normalize();
         Ball::new(x, v)
     }
 
